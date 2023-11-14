@@ -170,7 +170,7 @@ fn process_hipparcos_catalog(star_catalog: &[hipparcos_catalog::Star]) -> Vec<St
         let dec = star.dec_deg;
 
         // Calculate the luminance from the magnitude (https://en.wikipedia.org/wiki/Apparent_magnitude#Calculating_a_star's_apparent_magnitude)
-        let luminance: f32 = 10f32.powf(-0.3 * mag as f32);
+        let luminance: f32 = 10f32.powf(-0.2 * mag as f32);
 
         // Convert the RA/DEC to a cubemap face and x-y coordinates
         let (face, x, y) = ra_dec_to_face(ra, dec, IMAGE_RES);
