@@ -4,8 +4,10 @@ use bevy::{
     render::render_resource::{Extent3d, TextureViewDescriptor, TextureViewDimension},
 };
 use image::{EncodableLayout, ImageBuffer, Rgba32FImage};
+use serde::{Deserialize, Serialize};
 
 const IMAGE_RES: u64 = 3700;
+const CATALOG_RON: &str = include_str!("../data/hipparcos.ron");
 
 /// Plugin for the Star Skybox
 pub struct StarSkyboxPlugin;
@@ -16,6 +18,14 @@ impl Plugin for StarSkyboxPlugin {
             .add_systems(Startup, generate_skybox)
             .add_systems(Update, attach_skybox_image_to_cameras);
     }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct CatalogStar {
+    pub identifier: u64,
+    pub magnitude: f64,
+    pub ra_deg: f64,
+    pub dec_deg: f64,
 }
 
 /// Marker component to indicate which camera should have the skybox background
@@ -68,7 +78,8 @@ fn attach_skybox_image_to_cameras(
 }
 
 fn generate_skybox_image() -> Rgba32FImage {
-    let stars = process_hipparcos_catalog(&hipparcos_catalog::STARS);
+    let catalog: Vec<CatalogStar> = ron::de::from_str(CATALOG_RON).unwrap();
+    let stars = process_hipparcos_catalog(catalog.as_slice());
 
     // pos x
     let pos_x_stars = stars
@@ -161,7 +172,7 @@ struct Star {
     luminance: f32,
 }
 
-fn process_hipparcos_catalog(star_catalog: &[hipparcos_catalog::Star]) -> Vec<Star> {
+fn process_hipparcos_catalog(star_catalog: &[CatalogStar]) -> Vec<Star> {
     let mut parsed_stars = vec![];
 
     for star in star_catalog {
