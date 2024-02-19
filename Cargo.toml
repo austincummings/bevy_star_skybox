@@ -4,13 +4,15 @@ version = "0.12.0"
 edition = "2021"
 
 [dependencies]
-bevy = { version = "0.12.0", default-feature = false, features = ["exr"] }
+bevy = { version = "0.13.0", default-features = false, features = ["bevy_asset", "exr"] }
 image = "0.24"
 ron = "0.8"
 serde = { version = "1.0", features = ["derive"] }
 
 [dev-dependencies]
-bevy_panorbit_camera = { git = "ssh://git@github.com/Plonq/bevy_panorbit_camera.git" }
+bevy = "0.13.0"
+bevy_panorbit_camera = { git = "ssh://git@github.com/Plonq/bevy_panorbit_camera.git", branch = "bevy-0.13" }
+blake3 = { version = "1.5", features = ["pure"] } # Override blake3 dependency to fix WSL2 to Windows compilation
 
 [profile.dev]
 opt-level = 1

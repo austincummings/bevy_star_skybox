@@ -1,7 +1,10 @@
 use bevy::{
     core_pipeline::Skybox,
     prelude::*,
-    render::render_resource::{Extent3d, TextureViewDescriptor, TextureViewDimension},
+    render::{
+        render_asset::RenderAssetUsages,
+        render_resource::{Extent3d, TextureViewDescriptor, TextureViewDimension},
+    },
 };
 use image::{EncodableLayout, ImageBuffer, Rgba32FImage};
 use serde::{Deserialize, Serialize};
@@ -47,6 +50,7 @@ fn generate_skybox(mut skybox_image_res: ResMut<SkyboxImage>, mut images: ResMut
         bevy::render::render_resource::TextureDimension::D2,
         image.as_bytes().to_vec(),
         bevy::render::render_resource::TextureFormat::Rgba32Float,
+        RenderAssetUsages::RENDER_WORLD,
     );
     image_asset.reinterpret_stacked_2d_as_array(
         image_asset.texture_descriptor.size.height / image_asset.texture_descriptor.size.width,
@@ -71,9 +75,10 @@ fn attach_skybox_image_to_cameras(
 
     // Attach the skybox image to all cameras with the StarSkybox component and no skybox
     for entity in cameras_query.iter_mut() {
-        commands
-            .entity(entity)
-            .insert(Skybox(skybox_image_res.0.clone().unwrap()));
+        commands.entity(entity).insert(Skybox {
+            image: skybox_image_res.0.clone().unwrap(),
+            brightness: 100.0,
+        });
     }
 }
 

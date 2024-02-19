@@ -1,22 +1,10 @@
-use bevy::{
-    core_pipeline::bloom::BloomSettings, prelude::*, render::view::ColorGrading, window::WindowMode,
-};
+use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, render::view::ColorGrading};
 use bevy_panorbit_camera::{PanOrbitCamera, PanOrbitCameraPlugin};
 use bevy_star_skybox::{StarSkybox, StarSkyboxPlugin};
 
 fn main() {
     App::new()
-        .add_plugins((
-            DefaultPlugins.set(WindowPlugin {
-                primary_window: Some(Window {
-                    fit_canvas_to_parent: true,
-                    mode: WindowMode::BorderlessFullscreen,
-                    ..default()
-                }),
-                ..default()
-            }),
-            StarSkyboxPlugin,
-        ))
+        .add_plugins((DefaultPlugins, StarSkyboxPlugin))
         .add_plugins(PanOrbitCameraPlugin)
         .add_systems(Startup, setup)
         .run();
