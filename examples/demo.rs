@@ -1,9 +1,15 @@
-use bevy::{core_pipeline::bloom::Bloom, prelude::*};
+use bevy::{
+    core_pipeline::{
+        auto_exposure::{AutoExposure, AutoExposurePlugin},
+        bloom::Bloom,
+    },
+    prelude::*,
+};
 use bevy_star_skybox::{StarSkybox, StarSkyboxPlugin};
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, StarSkyboxPlugin))
+        .add_plugins((DefaultPlugins, AutoExposurePlugin, StarSkyboxPlugin))
         .add_systems(Startup, setup)
         .run();
 }
@@ -17,6 +23,7 @@ fn setup(mut commands: Commands) {
             ..default()
         },
         Bloom::default(),
+        AutoExposure::default(),
         StarSkybox,
     ));
 }
