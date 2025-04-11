@@ -78,6 +78,7 @@ fn attach_skybox_image_to_cameras(
         commands.entity(entity).insert(Skybox {
             image: skybox_image_res.0.clone().unwrap(),
             brightness: 100.0,
+            rotation: Quat::IDENTITY,
         });
     }
 }
